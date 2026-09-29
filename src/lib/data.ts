@@ -79,7 +79,7 @@ export const INIT_CONTRACTS: Contract[] = [
   {
     id:"C001", houseId:"H001", tenantName:"Kouassi Jean-Baptiste", tenantPhone:"+225 07 12 34 56",
     tenantEmail:"jb.kouassi@email.com", pin:"1234", startDate:"2025-01-15", editDate:"15/01/2025",
-    status:"active", idRecto:null, idVerso:null, emergencyName:"Kouassi Ama",
+    status:"active", idRecto:null, idVerso:null, profilePhoto:null, coverPhoto:null, emergencyName:"Kouassi Ama",
     emergencyPhone:"+225 07 99 11 22", emergencyRelation:"Épouse",
     caution:{ paid:true, amount:300000 }, advance:{ paid:true, amount:300000, months:2 },
     payments: genPayments("2025-01-15", 150000, 2),
@@ -87,7 +87,7 @@ export const INIT_CONTRACTS: Contract[] = [
   {
     id:"C002", houseId:"H002", tenantName:"Aya Fatima Diabaté", tenantPhone:"+225 05 98 76 54",
     tenantEmail:"aya.diabate@email.com", pin:"5678", startDate:"2024-10-01", editDate:"01/10/2024",
-    status:"active", idRecto:null, idVerso:null, emergencyName:"Diabaté Moussa",
+    status:"active", idRecto:null, idVerso:null, profilePhoto:null, coverPhoto:null, emergencyName:"Diabaté Moussa",
     emergencyPhone:"+225 05 44 55 66", emergencyRelation:"Frère",
     caution:{ paid:true, amount:190000 }, advance:{ paid:true, amount:285000, months:3 },
     payments: genPayments("2024-10-01", 95000, 3),
@@ -95,7 +95,7 @@ export const INIT_CONTRACTS: Contract[] = [
   {
     id:"C003", houseId:"H005", tenantName:"Koné Ibrahim", tenantPhone:"+225 01 23 45 67",
     tenantEmail:"kone.ibrahim@email.com", pin:"9999", startDate:"2024-06-01", editDate:"01/06/2024",
-    status:"active", idRecto:null, idVerso:null, emergencyName:"Koné Fatou",
+    status:"active", idRecto:null, idVerso:null, profilePhoto:null, coverPhoto:null, emergencyName:"Koné Fatou",
     emergencyPhone:"+225 07 77 88 99", emergencyRelation:"Mère",
     caution:{ paid:false, amount:140000 }, advance:{ paid:true, amount:140000, months:2 },
     payments: genPayments("2024-06-01", 70000, 2),

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Contract, House, PaymentMethod, UnpaidItem } from "@/types";
 import { INIT_HOUSES, INIT_CONTRACTS, fmt, genPin, today, genPayments, MONTHS, MONTHS_SHORT, PAYMENT_METHODS, CITIES, HOUSE_TYPES } from "@/lib/data";
 import { useLocalStorage } from "@/lib/useLocalStorage";
+import HermesStudio from "@/hermes/ui/HermesStudio";
 
 /* ─── Styles ──────────────────────────────────────────────────── */
 const S: Record<string, React.CSSProperties> = {
@@ -1137,6 +1138,7 @@ function OwnerPortal({ houses, contracts, authed, setAuthed, onBack, addHouse, a
         <nav style={S.nav}>
           {[
             {id:"dashboard",icon:"📊",label:"Tableau de bord"},
+            {id:"hermes",   icon:"📈",label:"HERMES Analytics"},
             {id:"contracts",icon:"📄",label:"Contrats"},
             {id:"houses",   icon:"🏘️",label:"Mes maisons"},
             {id:"unpaid",   icon:"⚠️",label:`Impayes (${allUnpaid.length})`},
@@ -1342,6 +1344,8 @@ function OwnerPortal({ houses, contracts, authed, setAuthed, onBack, addHouse, a
             )}
           </>;
         })()}
+
+        {view==="hermes" && <HermesStudio houses={houses} contracts={contracts}/>}
 
         {view==="contracts" && <>
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16,flexWrap:"wrap",gap:10}}>
