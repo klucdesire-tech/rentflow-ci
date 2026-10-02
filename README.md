@@ -83,6 +83,7 @@ Analytics complète, accessible dans l'espace propriétaire (menu **HERMES Analy
 | **Data Warehouse** | `src/hermes/warehouse/`, `sql/hermes/` | Modèle en étoile au grain mensuel : 3 tables de faits, 4 dimensions. Calculé en mémoire dans l'app et déployable tel quel sur Postgres / Supabase. |
 | **BI** | `src/hermes/bi/semantic.ts`, `sql.ts` | Couche sémantique : chaque métrique (recouvrement, ponctualité, occupation, perte de vacance…) est définie **une seule fois** et sert aux dashboards, à l'explorateur, à l'agent et au SQL généré. |
 | **Dashboarding** | `src/hermes/ui/` | Tableau de bord filtrable (période, ville) avec KPI et variations, courbes, barres, heatmap de paiement ; explorateur (métriques × 2 dimensions, filtres, tableau croisé, export CSV, SQL équivalent). Graphiques SVG sans dépendance. |
+| **Tableaux croisés (TCD)** | `src/hermes/bi/pivot.ts`, `src/hermes/ui/PivotTab.tsx` | TCD à la DHIS2 : glisser-déposer des dimensions (dont « Données ») en colonnes, lignes ou filtres, choix des éléments, périodes relatives ou fixes, totaux et sous-totaux recalculés (un taux n'est jamais additionné), lignes/colonnes vides masquées, légendes (seuils, dégradé), tri, inversion des axes, export Excel et CSV, modèles et favoris. |
 | **Agent HERMES** | `src/hermes/bi/agent.ts` | Constats automatiques (tendance, concentration des impayés, vacance, canaux, prévision, qualité des données) et questions en français → requête sémantique. |
 
 ### Déployer l'entrepôt sur Postgres / Supabase

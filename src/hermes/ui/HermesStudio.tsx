@@ -10,6 +10,8 @@ import {
 import { toSql } from "../bi/sql";
 import { askHermes, generateInsights, Insight } from "../bi/agent";
 import { downloadCsv, resultToCsv, tableToCsv } from "../bi/export";
+import PivotTab, { DEFAULT_PIVOT, layoutFromQuery } from "./PivotTab";
+import { PivotLayout } from "../bi/pivot";
 import { BarList, CellStatus, ColumnChart, Empty, INK, Legend, LineChart, SERIES, STATUS, StatusHeatmap } from "./charts";
 
 /* ─── Styles ──────────────────────────────────────────────────── */
@@ -34,7 +36,7 @@ const LEVEL: Record<Insight["level"], { color: string; bg: string; icon: string;
 const ym = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 const shift = (now: Date, m: number) => ym(new Date(now.getFullYear(), now.getMonth() + m, 1));
 
-type Tab = "dashboard" | "explorer" | "warehouse" | "pipeline" | "agent";
+type Tab = "dashboard" | "explorer" | "pivot" | "warehouse" | "pipeline" | "agent";
 
 /* ═══ Composant racine ═══════════════════════════════════════════ */
 
@@ -50,11 +52,14 @@ export default function HermesStudio({ houses, contracts }: { houses: House[]; c
   const insights = useMemo(() => generateInsights(views, run, now), [views, run, now]);
 
   const rerun = () => { setHistory(h => [run, ...h].slice(0, 9)); setRunSeq(s => s + 1); };
+  const [pivotLayout, setPivotLayout] = useState<PivotLayout>(DEFAULT_PIVOT);
   const explore = (q: Query) => { setExplorerQuery(q); setTab("explorer"); };
+  const openPivot = (q: Query) => { setPivotLayout(layoutFromQuery(q)); setTab("pivot"); };
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "dashboard", label: "Tableau de bord" },
     { id: "explorer",  label: "Explorateur BI" },
+    { id: "pivot",     label: "Tableau croisé (TCD)" },
     { id: "agent",     label: `Agent HERMES (${insights.length})` },
     { id: "warehouse", label: "Entrepôt" },
     { id: "pipeline",  label: "Pipeline" },
@@ -83,7 +88,8 @@ export default function HermesStudio({ houses, contracts }: { houses: House[]; c
       </div>
 
       {tab === "dashboard" && <DashboardTab views={views} now={now} onExplore={explore} />}
-      {tab === "explorer"  && <ExplorerTab views={views} q={explorerQuery} setQ={setExplorerQuery} now={now} />}
+      {tab === "explorer"  && <ExplorerTab views={views} q={explorerQuery} setQ={setExplorerQuery} now={now} onPivot={openPivot} />}
+      {tab === "pivot"     && <PivotTab views={views} now={now} layout={pivotLayout} setLayout={setPivotLayout} />}
       {tab === "agent"     && <AgentTab insights={insights} onExplore={explore} now={now} />}
       {tab === "warehouse" && <WarehouseTab wh={run.warehouse} />}
       {tab === "pipeline"  && <PipelineTab run={run} history={history} onRun={rerun} />}
@@ -237,7 +243,7 @@ function DashboardTab({ views, now, onExplore }: { views: Views; now: Date; onEx
 
 /* ═══ Explorateur BI ═════════════════════════════════════════════ */
 
-function ExplorerTab({ views, q, setQ, now }: { views: Views; q: Query; setQ: (q: Query) => void; now: Date }) {
+function ExplorerTab({ views, q, setQ, now, onPivot }: { views: Views; q: Query; setQ: (q: Query) => void; now: Date; onPivot: (q: Query) => void }) {
   const [question, setQuestion] = useState("");
   const [understood, setUnderstood] = useState<string | null>(null);
   const [showSql, setShowSql] = useState(false);
@@ -344,6 +350,7 @@ function ExplorerTab({ views, q, setQ, now }: { views: Views; q: Query; setQ: (q
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
           <div style={cardTitle}>{res.rows.length} ligne(s)</div>
           <div style={{ display: "flex", gap: 6 }}>
+            <button style={ghost} onClick={() => onPivot(q)}>Ouvrir en TCD</button>
             <button style={ghost} onClick={() => setShowSql(s => !s)}>{showSql ? "Masquer" : "Voir"} le SQL</button>
             <button style={btn} onClick={() => downloadCsv(`hermes_${(q.dimensions ?? []).join("_") || "total"}.csv`, resultToCsv(res))}>Exporter CSV</button>
           </div>
